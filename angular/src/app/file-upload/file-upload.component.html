@@ -1,0 +1,66 @@
+<div class="container mt-4 mb-5 shadow-lg p-4 rounded">
+  <h2 class="text-center mb-4">Upload Files</h2>
+
+  <!-- Form Upload Files (Drag and Drop Area) -->
+  <div class="mb-3">
+    <label for="fileInput" class="form-label">Drag and Drop Files Here</label>
+    <div class="border p-5 text-center" style="border-radius: 8px; border: 2px dashed #007bff;"
+      (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)"
+      (click)="fileInput.click()">
+      <p class="text-muted">Drag and drop files or click to select files</p>
+      <input #fileInput type="file" id="fileInput" (change)="onFilesSelected($event)" class="form-control" multiple
+        style="display:none" />
+    </div>
+  </div>
+
+  <!-- Danh sách các tệp đã chọn -->
+  <div *ngIf="selectedFiles.length > 0" class="mb-3">
+    <h5>Selected Files:</h5>
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let file of selectedFiles">
+        <i class="bi bi-file-earmark"></i> {{ file.name }}
+        <button class="btn btn-sm btn-danger" (click)="removeFile(file)">
+          <i class="bi bi-x-circle"></i> Xóa
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Button Upload -->
+  <button class="btn btn-primary w-100" (click)="uploadFiles()" [disabled]="isUploading">
+    <span *ngIf="isUploading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    {{ isUploading ? 'Uploading...' : 'Upload Files' }}
+  </button>
+
+  <!-- Success or Error Message -->
+  <div *ngIf="uploadSuccess" class="alert alert-success mt-3">
+    Files uploaded successfully!
+  </div>
+  <div *ngIf="uploadError" class="alert alert-danger mt-3">
+    An error occurred while uploading the files.
+  </div>
+
+  <!-- Download Section -->
+  <div class="card p-4 shadow-sm mt-4">
+    <h3 class="text-center mb-3">Download Files</h3>
+
+    <!-- Danh sách các tệp đã tải lên -->
+    <div *ngIf="uploadedFiles.length > 0">
+      <h5>Available Files:</h5>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center"
+          *ngFor="let file of uploadedFiles">
+          <i class="bi bi-file-earmark"></i> {{ file.name }}
+          <button class="btn btn-sm btn-secondary" (click)="downloadFile(file.id)">
+            <i class="bi bi-download"></i> Download
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Thông báo khi không có tệp nào -->
+    <div *ngIf="uploadedFiles.length === 0" class="text-center text-muted">
+      No files available for download.
+    </div>
+  </div>
+</div>
