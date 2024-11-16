@@ -22,8 +22,7 @@ import { PageModule } from '@abp/ng.components/page';
   imports: [
     CoreModule,
     ThemeSharedModule,
-    PageModule,
-    FileUploadComponent
+    PageModule
   ]
 })
 export class BookComponent implements OnInit {

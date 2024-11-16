@@ -4,9 +4,8 @@
   <!-- Form Upload Files (Drag and Drop Area) -->
   <div class="mb-3">
     <label for="fileInput" class="form-label">Drag and Drop Files Here</label>
-    <div class="border p-5 text-center" style="border-radius: 8px; border: 2px dashed #007bff;"
-      (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)"
-      (click)="fileInput.click()">
+    <div class="border p-5 text-center" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)" (click)="fileInput.click()">
       <p class="text-muted">Drag and drop files or click to select files</p>
       <input #fileInput type="file" id="fileInput" (change)="onFilesSelected($event)" class="form-control" multiple
         style="display:none" />
@@ -42,25 +41,19 @@
 
   <!-- Download Section -->
   <div class="card p-4 shadow-sm mt-4">
-    <h3 class="text-center mb-3">Download Files</h3>
+    <h3>Download File by Name</h3>
 
-    <!-- Danh sách các tệp đã tải lên -->
-    <div *ngIf="uploadedFiles.length > 0">
-      <h5>Available Files:</h5>
-      <ul class="list-group">
-        <li class="list-group-item d-flex justify-content-between align-items-center"
-          *ngFor="let file of uploadedFiles">
-          <i class="bi bi-file-earmark"></i> {{ file.name }}
-          <button class="btn btn-sm btn-secondary" (click)="downloadFile(file.id)">
-            <i class="bi bi-download"></i> Download
-          </button>
-        </li>
-      </ul>
+    <div class="form-group mb-3">
+      <label for="fileNameInput">Enter File Name</label>
+      <input id="fileNameInput" type="text" class="form-control" placeholder="Enter file name" [(ngModel)]="fileName" />
     </div>
 
-    <!-- Thông báo khi không có tệp nào -->
-    <div *ngIf="uploadedFiles.length === 0" class="text-center text-muted">
-      No files available for download.
+    <button class="btn btn-primary" [disabled]="isDownloading || !fileName" (click)="downloadFile()">
+      Download
+    </button>
+
+    <div *ngIf="downloadError" class="alert alert-danger mt-3">
+      {{ downloadError }}
     </div>
   </div>
 </div>

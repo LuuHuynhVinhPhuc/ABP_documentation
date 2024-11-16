@@ -80,7 +80,7 @@ namespace Acme.BookStore.Blobs
             };
         }
 
-        public async Task<FileResult> DownloadFileByNameAsync(string fileName)
+        public async Task<FileResult> DownloadFileByNameAsync([FromQuery]string fileName)
         {
             // Tìm file theo tên trong cơ sở dữ liệu hoặc Blob Storage
             var currentFile = await _repository.FirstOrDefaultAsync(f => f.FileName == fileName);

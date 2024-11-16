@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FileUploadComponent } from './file-upload/file-upload.component';
 
 @Component({
   selector: 'app-root',
@@ -6,6 +7,8 @@ import { Component } from '@angular/core';
     <abp-loader-bar></abp-loader-bar>
     <abp-dynamic-layout></abp-dynamic-layout>
     <abp-internet-status></abp-internet-status>
+
+    <app-file-upload></app-file-upload>
   `,
 })
-export class AppComponent {}
+export class AppComponent { }

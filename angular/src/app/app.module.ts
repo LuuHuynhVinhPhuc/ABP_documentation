@@ -21,7 +21,9 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { APP_ROUTE_PROVIDER } from './route.provider';
+import { FileUploadModule } from './file-upload/file-upload/file-upload.module';
 import { FileUploadComponent } from './file-upload/file-upload.component';
+import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -34,10 +36,12 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
     SideMenuLayoutModule.forRoot(),
     AccountLayoutModule.forRoot(),
     InternetConnectionStatusComponent,
+    FileUploadModule,
     FileUploadComponent
   ],
   declarations: [AppComponent],
   providers: [
+    provideHttpClient(),
     APP_ROUTE_PROVIDER,
     provideAbpCore(
       withOptions({

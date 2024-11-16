@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { FileService } from '@proxy/blobs';
 import { DocumentDto } from '@proxy/file-action';
 
 @Component({
   selector: 'app-file-upload',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './file-upload.component.html',
+  standalone: true,
   styleUrl: './file-upload.component.scss'
 })
 export class FileUploadComponent {
@@ -17,7 +19,12 @@ export class FileUploadComponent {
   uploadSuccess = false;
   uploadError = false;
 
-  constructor(private fileService: FileService) { }
+  // download parameter
+  fileName: string = ''; // Tên file được nhập
+  isDownloading: boolean = false; // Trạng thái tải xuống
+  downloadError: string | null = null; // Lỗi khi tải file
+
+  constructor(private fileService: FileService, private http: HttpClient) { }
 
   // when user choose files
   onFilesSelected(event: any): void {
@@ -86,10 +93,31 @@ export class FileUploadComponent {
   }
 
   // download file with name
-  downloadFile(fileId: string): void {
-    // Thực hiện tải xuống theo ID tệp
-    console.log('Downloading file with ID:', fileId);
-    // Ở đây bạn có thể gọi API để tải tệp từ backend theo ID
+  downloadFile() {
+    if (!this.fileName) {
+      this.downloadError = "File name is required!";
+      return;
+    }
+
+    const params = new HttpParams().set('fileName', this.fileName);
+
+    this.http.post('https://localhost:44376/api/app/file/download-file-by-name', null, {
+      params: params,
+      responseType: 'blob', // Để xử lý file dưới dạng blob
+    }).subscribe({
+      next: (response: Blob) => {
+        const downloadUrl = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = this.fileName; // Đặt tên file khi tải về
+        a.click();
+        window.URL.revokeObjectURL(downloadUrl);
+      },
+      error: (error) => {
+        console.error(error);
+        this.downloadError = 'An error occurred while downloading the file.';
+      }
+    });
   }
 
 
